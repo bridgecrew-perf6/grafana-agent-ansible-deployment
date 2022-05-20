@@ -1,0 +1,18 @@
+---
+# Main play
+- name: Deploy Grafana Agent and Configure
+  hosts: "all"
+  any_errors_fatal: yes
+
+# Pre-task, ensuring this is only run on RedHat. When deployment is to be considered on Windows, we'd and roles which are selectivly called, depending on the ansible_os_family value.
+  pre_tasks:
+    - name: Target only RedHat
+      assert:
+        that:
+          - "ansible_os_family == 'RedHat'"
+        fail_msg: "OS: {{ ansible_os_family }} is not supported by this script"
+
+# Roles to be called. These relate to folder on the filesystem with plays.
+  roles:
+    - ansible-role-grafana_agent-main
+    - grafanaAgentProcessConfiguration
