@@ -52,13 +52,19 @@ log_config:
         filename: /tmp/positions.yaml
       scrape_configs:
 
-10.254.160.110:
+ansible.aiops.wwtatc.local:
   - "app111"
 
-10.254.160.111:
+open-telemetry.aiops.wwtatc.local:
   - "app111"
 
-10.254.160.112:
+grafana.aiops.wwtatc.local:
+  - "app111"
+
+loki.aiops.wwtatc.local:
+  - "app111"
+
+eshop.aiops.wwtatc.local:
   - "app111"
 
 app_app111:
