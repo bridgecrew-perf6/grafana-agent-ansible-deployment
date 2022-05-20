@@ -1,0 +1,13 @@
+---
+- name: Remove null scrape_config
+  lineinfile:
+    path: "{{ config_location }}/agent-config.yaml"
+    regexp: 'scrape_configs: null'
+    line: '    scrape_configs:'
+
+- name: Restart grafana
+  become: True
+  systemd:
+    name: "grafana-agent"
+    state: restarted
+    daemon_reload: True

@@ -1,0 +1,31 @@
+---
+# Ensure the grafana config file exists.
+- name: Ensure grafana config file exists
+  file:
+    path: "{{ config_location }}/agent-config.yaml"
+    state: file
+
+# Insert the process exporter config block from defaults/main.yml file
+- name: Insert process exporter configuration block
+  notify:
+    - Restart grafana
+  blockinfile:
+    path: "{{ config_location }}/agent-config.yaml"
+    block: |
+        {{ process_exporter_config | to_nice_yaml(indent=2) | indent(2, True) }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR PROCESS EXPORTER"
+
+# Insert log config block from defaults/main.yml file
+- name: Insert log configuration block
+  notify:
+    - Restart grafana
+  blockinfile:
+    path: "{{ config_location }}/agent-config.yaml"
+    block: |
+        {{ log_config | to_nice_yaml(indent=2) | indent(0, True)}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR LOG EXPORTER"
+
+# Loop over the host config found in the defaul/main.yml file.
+- name: Write each config section for the applications hosted on the server
+  include_tasks: "write_config.yml"
+  loop: "{{ vars[inventory_hostname] }}"
