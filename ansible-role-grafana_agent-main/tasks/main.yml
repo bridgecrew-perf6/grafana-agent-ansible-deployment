@@ -1,0 +1,103 @@
+---
+# Ensure the Group exists. Set the value in grafanagrpexists
+- name: Check if {{ service_gid }} group exists
+  shell: getent group {{ service_gid }}
+  register: grafanagrpexists
+  changed_when: False
+  failed_when: false
+
+# Create the Group WHEN it doesn't already exist or if the Group name is root.
+- name: Create {{ service_gid }} group
+  group:
+    name: "{{ service_gid }}"
+    state: present
+    system: True
+  when: service_gid != "root" and grafanagrpexists.stdout == ""
+
+# Ensure the User exists. Set the value in grafanausrexists
+- name: Check if {{ service_id }} user exists
+  shell: getent passwd {{ service_id }}
+  register: grafanausrexists
+  changed_when: False
+  failed_when: false
+
+# Create the User WHEN it doesn't already exist or if the User name is root.
+- name: Create the grafana user
+  user:
+    name: "{{ service_id }}"
+    group: "{{ service_gid }}"
+    append: True
+    shell: /bin/bash
+    system: True
+    createhome: False
+    home: "{{ agent_location }}"
+  when: service_id != "root" and grafanausrexists.stdout == ""
+
+# Download the latest file from official grafana releases.
+- name: Download Agent file
+  ansible.builtin.get_url:
+    url: "https://github.com/grafana/agent/releases/latest/download/agent-linux-{{ grafana_agent_type[ansible_architecture] }}.zip"
+    dest: "/tmp/agent-linux.zip"
+    mode: '0644'
+
+# Ensure the unzip is available
+- name: Install unzip
+  ansible.builtin.package:
+    name: unzip
+    state: present
+  when: install_unzip|bool
+
+# Create the agent directory with the correct permissions and ownership
+- name: Create directory for Agent
+  ansible.builtin.file:
+    state: directory
+    recurse: true
+    path: "{{ agent_location }}"
+    mode: u=rwX,g=rX,o=rX
+    owner: "{{ service_id }}"
+    group: "{{ service_gid }}"
+
+# Unzip the recently downloaded agent to the newly created folder
+- name: Unarchive Agent
+  ansible.builtin.unarchive:
+    src: "/tmp/agent-linux.zip"
+    dest: "{{ agent_location }}"
+    remote_src: true
+    mode: '0755'
+
+# Create a directory for the agent's confif with the correct permissions and ownership
+- name: Create directory for Agent's config file
+  ansible.builtin.file:
+    state: directory
+    recurse: true
+    path: "{{ config_location }}"
+    mode: u=rwX,g=rX,o=rX
+    owner: "{{ service_id }}"
+    group: "{{ service_gid }}"
+
+# Create the agent's config file with the correct permissions and ownership
+- name: Create Agent's config file
+  ansible.builtin.template:
+    src: "{{ grafana_agent_config_template }}"
+    dest: "{{ config_location }}/agent-config.yaml"
+    mode: u=rw,g=r,o=r
+    force: true
+    owner: "{{ service_id }}"
+    group: "{{ service_gid }}"
+
+# Create the service file for the agent using a template
+- name: Create Systemd service
+  block:
+    - name: Template the new service file for Grafana agent
+      ansible.builtin.template:
+        src: "{{ grafana_agent_systemd_template }}"
+        dest: "{{ systemd_service_folder }}/grafana-agent.service"
+        mode: '0644'
+
+    # Reload and start the service
+    - name: Reload and start service Grafana agent
+      ansible.builtin.service:
+        name: grafana-agent
+        state: restarted
+        daemon_reload: true
+        enabled: true

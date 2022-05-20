@@ -1,0 +1,11 @@
+[Unit]
+Description=Grafana Cloud agent
+
+[Service]
+Type=simple
+User={{ service_id }}
+ExecStart={{ agent_location }}/agent-linux-{{ grafana_agent_type[ansible_architecture] }} --config.file={{ config_location }}/agent-config.yaml -config.expand-env
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
