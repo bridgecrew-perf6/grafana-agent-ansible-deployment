@@ -68,14 +68,14 @@ eshop.aiops.wwtatc.local:
   - "app111"
 
 app_grafana_monitoring:
-  - job_name: grafana-logs
-    static_configs:
-    - labels:
-        __path__: /opt/grafana/logs/grafana/grafana.log
-        application: grafana
-        agent_hostname: ${HOSTNAME}
-    targets:
-    - ${HOSTNAME}
+    - job_name: grafana-logs
+      static_configs:
+      - labels:
+          __path__: /opt/grafana/logs/grafana/grafana.log
+          application: grafana
+          agent_hostname: ${HOSTNAME}
+        targets:
+        - ${HOSTNAME}
 
 app_app111:
   - job_name: myapp111
