@@ -30,9 +30,25 @@ process_exporter_config:
     enabled: true
     scrape_integration: ${GRAFANA_PROCESS_EXPORTER_SCRAPE_ENABLE:-true}
     process_names:
-    - name: "grafana-agent"
-      cmdline:
-      - '/opt/grafana/agent/agent-linux-amd64'
+    process_names:
+    - cmdline:
+      - /opt/grafana/agent/agent-linux-amd64
+      name: grafana-agent
+    - cmdline:
+      - '/opt/grafana/grafana/bin/grafana-server'
+      name: grafana-server
+    - cmdline:
+      - '/opt/grafana/prometheus/prometheus'
+      name: prometheus
+    - cmdline:
+      - '/opt/grafana/loki/loki-linux-amd64'
+      name: loki
+    - cmdline:
+      - '/opt/grafana/alertmanager/alertmanager'
+      name: alertmanager
+    - cmdline:
+      - '/opt/grafana/tempo/tempo'
+      name: tempo
     recheck_on_scrape: true
     metric_relabel_configs:
       - source_labels: [__name__]
@@ -55,6 +71,7 @@ log_config:
 ansible.aiops.wwtatc.local:
   - "grafana_monitoring"
   - "prometheus_monitoring"
+  - "loki_monitoring"
 
 open-telemetry.aiops.wwtatc.local:
   - "app111"
@@ -85,6 +102,16 @@ app_prometheus_monitoring:
         __path__: /opt/grafana/logs/prometheus/prometheus.log
         application: prometheus
         agent_hostname: ${HOSTNAME}
+      targets:
+      - ${HOSTNAME}
+
+app_loki_monitoring:
+  - job_name: loki-logs
+    static_configs:
+    - labels:
+        agent_hostname: ${HOSTNAME}
+        __path__: /opt/grafana/logs/loki/loki.log
+        application: loki
       targets:
       - ${HOSTNAME}
 
