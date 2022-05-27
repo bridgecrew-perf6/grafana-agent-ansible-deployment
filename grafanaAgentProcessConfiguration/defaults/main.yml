@@ -54,6 +54,7 @@ log_config:
 
 ansible.aiops.wwtatc.local:
   - "grafana_monitoring"
+  - "prometheus_monitoring"
 
 open-telemetry.aiops.wwtatc.local:
   - "app111"
@@ -73,6 +74,16 @@ app_grafana_monitoring:
     - labels:
         __path__: /opt/grafana/logs/grafana/grafana.log
         application: grafana
+        agent_hostname: ${HOSTNAME}
+      targets:
+      - ${HOSTNAME}
+
+app_prometheus_monitoring:
+  - job_name: prometheus-logs
+    static_configs:
+    - labels:
+        __path__: /opt/grafana/logs/prometheus/prometheus.log
+        application: prometheus
         agent_hostname: ${HOSTNAME}
       targets:
       - ${HOSTNAME}
