@@ -30,7 +30,6 @@ process_exporter_config:
     enabled: true
     scrape_integration: ${GRAFANA_PROCESS_EXPORTER_SCRAPE_ENABLE:-true}
     process_names:
-    process_names:
     - cmdline:
       - /opt/grafana/agent/agent-linux-amd64
       name: grafana-agent
