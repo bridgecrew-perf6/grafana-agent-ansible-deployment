@@ -28,8 +28,6 @@ grafana_promtail_systemd_template: promtail.service.j2
 process_exporter_config:
   process_exporter:
     enabled: true
-    scrape_integration: ${GRAFANA_PROCESS_EXPORTER_SCRAPE_ENABLE:-true}
-    recheck_on_scrape: true
     metric_relabel_configs:
       - source_labels: [__name__]
         regex: 'namedprocess_namegroup_context_switches_total|namedprocess_namegroup_major_page_faults_total|namedprocess_namegroup_minor_page_faults_total|namedprocess_namegroup_oldest_start_time_seconds|namedprocess_namegroup_read_bytes_total|namedprocess_namegroup_thread_context_switches_total|namedprocess_namegroup_thread_io_bytes_total|namedprocess_namegroup_thread_major_page_faults_total|namedprocess_namegroup_thread_minor_page_faults_total|namedprocess_namegroup_threads_wchan|namedprocess_namegroup_worst_fd_ratio|namedprocess_namegroup_write_bytes_total'
@@ -38,9 +36,6 @@ process_exporter_config:
         regex: 'Sleeping|Waiting|Other'
         action: drop
     process_names:
-    - cmdline:
-      - /opt/grafana/agent/agent-linux-amd64
-      name: grafana-agent
 
 log_config:
   logs:

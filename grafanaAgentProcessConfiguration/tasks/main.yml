@@ -6,7 +6,7 @@
     state: file
 
 # Insert the process exporter config block from defaults/main.yml file
-- name: Insert process exporter configuration block
+- name: Insert process exporter configuration block from defaults
   notify:
     - Restart grafana
   blockinfile:
