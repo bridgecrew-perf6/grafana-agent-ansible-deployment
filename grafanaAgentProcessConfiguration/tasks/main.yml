@@ -6,14 +6,14 @@
     state: file
 
 # Insert the process exporter config block from defaults/main.yml file
-- name: Insert process exporter configuration block
-  notify:
-    - Restart grafana
-  blockinfile:
-    path: "{{ config_location }}/agent-config.yaml"
-    block: |
-        {{ process_exporter_config | to_nice_yaml(indent=2) | indent(2, True) }}
-    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR PROCESS EXPORTER"
+#- name: Insert process exporter configuration block
+#  notify:
+#    - Restart grafana
+#  blockinfile:
+#    path: "{{ config_location }}/agent-config.yaml"
+#    block: |
+#        {{ process_exporter_config | to_nice_yaml(indent=2) | indent(2, True) }}
+#    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR PROCESS EXPORTER"
 
 # Insert log config block from defaults/main.yml file
 - name: Insert log configuration block
