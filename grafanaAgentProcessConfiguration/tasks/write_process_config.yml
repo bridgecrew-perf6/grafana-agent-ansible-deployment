@@ -2,6 +2,7 @@
 - name: Insert configuration block for process names {{ item }}
   notify:
     - Restart grafana
+    - Remove null process_names
   blockinfile:
     path: "{{ config_location }}/agent-config.yaml"
     block: |
