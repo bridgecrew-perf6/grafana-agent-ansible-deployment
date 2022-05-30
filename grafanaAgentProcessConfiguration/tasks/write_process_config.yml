@@ -1,5 +1,5 @@
 ﻿# Insert the promtail configuration which is defined in the default/main.yml file
-- name: Insert configuration block
+- name: Insert configuration block for process names {{ item }}
   notify:
     - Restart grafana
   blockinfile:
