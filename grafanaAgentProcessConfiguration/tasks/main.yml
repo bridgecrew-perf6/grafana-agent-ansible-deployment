@@ -16,9 +16,9 @@
     marker: "# {mark} ANSIBLE MANAGED BLOCK FOR PROCESS EXPORTER"
 
 # Loop over the host config found in the defaul/main.yml file.
-- name: Write each config section for the processes hosted on the server
+- name: Write each config section for the processes hosted on the server {{ vars['proc_'+inventory_hostname] }}
   include_tasks: "write_process_config.yml"
-  loop: "{{ vars[inventory_hostname] }}"
+  loop: "{{ vars['proc_'+inventory_hostname] }}"
 
 # Insert log config block from defaults/main.yml file
 - name: Insert log configuration block
