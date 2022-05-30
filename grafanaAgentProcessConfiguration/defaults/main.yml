@@ -58,6 +58,7 @@ ansible.aiops.wwtatc.local:
 
 proc_ansible.aiops.wwtatc.local:
   - "grafanaserver"
+  - "prometheusserver"
 
 open-telemetry.aiops.wwtatc.local:
   - "app111"
@@ -115,6 +116,11 @@ proc_grafanaserver:
   - cmdline:
     - /opt/grafana/grafana/bin/grafana-server
     name: grafana-server
+
+proc_prometheusserver:
+  - cmdline:
+    - '/opt/grafana/prometheus/prometheus'
+    name: prometheus
 
 bp-hpe-rhel02.wwtpoc.local:
   - "app2"
