@@ -25,7 +25,7 @@ grafana_promtail_config_template: promtail-config.yaml.j2
 grafana_promtail_systemd_template: promtail.service.j2
 
 
-process_exporter_config:
+process_exporter_config_part1:
   process_exporter:
     enabled: true
     metric_relabel_configs:
@@ -36,6 +36,10 @@ process_exporter_config:
         regex: 'Sleeping|Waiting|Other'
         action: drop
     process_names:
+
+process_exporter_config_part2:
+  recheck_on_scrape: true
+  scrape_integration: ${GRAFANA_PROCESS_EXPORTER_SCRAPE_ENABLE:-true}
 
 log_config:
   logs:

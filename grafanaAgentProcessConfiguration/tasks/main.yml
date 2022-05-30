@@ -6,19 +6,29 @@
     state: file
 
 # Insert the process exporter config block from defaults/main.yml file
-- name: Insert process exporter configuration block from defaults
+- name: Insert process exporter configuration block from defaults part 1
   notify:
     - Restart grafana
   blockinfile:
     path: "{{ config_location }}/agent-config.yaml"
     block: |
-        {{ process_exporter_config | to_nice_yaml(indent=2) | indent(2, True) }}
-    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR PROCESS EXPORTER"
+        {{ process_exporter_config_part1 | to_nice_yaml(indent=2) | indent(2, True) }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR PROCESS EXPORTER PART 1"
 
 # Loop over the host config found in the defaul/main.yml file.
 - name: Write each config section for the processes hosted on the server {{ vars['proc_'+inventory_hostname] }}
   include_tasks: "write_process_config.yml"
   loop: "{{ vars['proc_'+inventory_hostname] }}"
+
+# Insert the process exporter config block from defaults/main.yml file
+- name: Insert process exporter configuration block from defaults part 2
+  notify:
+    - Restart grafana
+  blockinfile:
+    path: "{{ config_location }}/agent-config.yaml"
+    block: |
+        {{ process_exporter_config_part2 | to_nice_yaml(indent=2) | indent(2, True) }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR PROCESS EXPORTER PART 2"
 
 # Insert log config block from defaults/main.yml file
 #- name: Insert log configuration block
