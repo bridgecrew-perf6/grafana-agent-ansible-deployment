@@ -33,21 +33,8 @@ process_exporter_config:
     - cmdline:
       - /opt/grafana/agent/agent-linux-amd64
       name: grafana-agent
-    - cmdline:
-      - '/opt/grafana/grafana/bin/grafana-server'
-      name: grafana-server
-    - cmdline:
-      - '/opt/grafana/prometheus/prometheus'
-      name: prometheus
-    - cmdline:
-      - '/opt/grafana/loki/loki-linux-amd64'
-      name: loki
-    - cmdline:
-      - '/opt/grafana/alertmanager/alertmanager'
-      name: alertmanager
-    - cmdline:
-      - '/opt/grafana/tempo/tempo'
-      name: tempo
+# BEGIN ANSIBLE MANAGED BLOCK FOR PROCESS EXPORTER
+# END ANSIBLE MANAGED BLOCK FOR PROCESS EXPORTER
     recheck_on_scrape: true
     metric_relabel_configs:
       - source_labels: [__name__]
@@ -76,7 +63,7 @@ open-telemetry.aiops.wwtatc.local:
   - "app111"
 
 grafana.aiops.wwtatc.local:
-  - "app111"
+  - "grafana_monitoring"
 
 loki.aiops.wwtatc.local:
   - "app111"
