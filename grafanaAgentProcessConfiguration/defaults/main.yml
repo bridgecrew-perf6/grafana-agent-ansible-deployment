@@ -33,8 +33,6 @@ process_exporter_config:
     - cmdline:
       - /opt/grafana/agent/agent-linux-amd64
       name: grafana-agent
-# BEGIN ANSIBLE MANAGED BLOCK FOR PROCESS NAMES EXPORTER
-# END ANSIBLE MANAGED BLOCK FOR PROCESS NAMES EXPORTER
     recheck_on_scrape: true
     metric_relabel_configs:
       - source_labels: [__name__]
@@ -66,7 +64,7 @@ grafana.aiops.wwtatc.local:
   - "grafana_monitoring"
 
 loki.aiops.wwtatc.local:
-  - "app111"
+  - "loki_monitoring"
 
 eshop.aiops.wwtatc.local:
   - "app111"
