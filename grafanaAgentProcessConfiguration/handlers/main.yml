@@ -5,6 +5,12 @@
     regexp: 'scrape_configs: null'
     line: '    scrape_configs:'
 
+- name: Remove null process_names
+  lineinfile:
+    path: "{{ config_location }}/agent-config.yaml"
+    regexp: 'process_names: null'
+    line: '    process_names:'
+
 - name: Restart grafana
   become: True
   systemd:
