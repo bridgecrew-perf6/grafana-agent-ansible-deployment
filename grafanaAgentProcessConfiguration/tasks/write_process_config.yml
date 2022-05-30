@@ -2,9 +2,8 @@
 - name: Insert configuration block
   notify:
     - Restart grafana
-    - Remove null scrape_config
   blockinfile:
     path: "{{ config_location }}/agent-config.yaml"
     block: |
-        {{ vars['app_'+item] | to_nice_yaml(indent=2) | indent(4, True) }}
-    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
+        {{ vars['proc_'+item] | to_nice_yaml(indent=2) | indent(4, True) }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK proc_{{ item }}"
