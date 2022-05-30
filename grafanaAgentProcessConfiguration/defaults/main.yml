@@ -57,6 +57,9 @@ ansible.aiops.wwtatc.local:
   - "prometheus_monitoring"
   - "loki_monitoring"
 
+proc_ansible.aiops.wwtatc.local:
+  - "grafanaserver"
+
 open-telemetry.aiops.wwtatc.local:
   - "app111"
 
@@ -108,6 +111,11 @@ app_app111:
         host: ${HOSTNAME}
         __path__: /opt/promtailtest/test6.log
         application: applogs
+
+proc_grafanaserver:
+  - cmdline:
+    - /opt/grafana/grafana/bin/grafana-server
+    name: grafana-server
 
 bp-hpe-rhel02.wwtpoc.local:
   - "app2"
