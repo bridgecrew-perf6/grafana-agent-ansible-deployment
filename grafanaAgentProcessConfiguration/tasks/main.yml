@@ -27,7 +27,7 @@
   blockinfile:
     path: "{{ config_location }}/agent-config.yaml"
     block: |
-        {{ process_exporter_config_part2 | to_nice_yaml(indent=4) | indent(2, True) }}
+        {{ process_exporter_config_part2 | to_nice_yaml(indent=4) | indent(4, True) }}
     marker: "# {mark} ANSIBLE MANAGED BLOCK FOR PROCESS EXPORTER PART 2"
 
 # Insert log config block from defaults/main.yml file
