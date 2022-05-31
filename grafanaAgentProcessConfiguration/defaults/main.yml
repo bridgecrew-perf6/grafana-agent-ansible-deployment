@@ -51,6 +51,8 @@ log_config:
         filename: /tmp/positions.yaml
       scrape_configs:
 
+# ansible.aiops.wwtatc.local
+
 ansible.aiops.wwtatc.local:
   - "grafana_monitoring"
   - "prometheus_monitoring"
@@ -60,17 +62,52 @@ proc_ansible.aiops.wwtatc.local:
   - "grafanaserver"
   - "prometheusserver"
 
+# open-telemetry.aiops.wwtatc.local
+
 open-telemetry.aiops.wwtatc.local:
   - "app111"
 
+# grafana.aiops.wwtatc.local
+
 grafana.aiops.wwtatc.local:
   - "grafana_monitoring"
+  - "prometheus_monitoring"
+
+proc_grafana.aiops.wwtatc.local:
+  - "grafanaserver"
+  - "prometheusserver"
+
+# loki.aiops.wwtatc.local
 
 loki.aiops.wwtatc.local:
   - "loki_monitoring"
 
+proc_loki.aiops.wwtatc.local:
+  - "lokiserver"
+  - "alertmanagerserver"
+  - "temposerver"
+
+# eshop.aiops.wwtatc.local
+
 eshop.aiops.wwtatc.local:
-  - "app111"
+  - "eshop_nginx"
+
+proc_eshop.aiops.wwtatc.local:
+  - "nginx_worker_process"
+  - "nginx_master_process"
+  - "nginx_cache_manager_process"
+
+# Log monitoring
+
+app_eshop_nginx:
+  - job_name: eshop-nginx
+    static_configs:
+    - labels:
+        __path__: /var/log/nginx/*log
+        application: eshop
+        agent_hostname: ${HOSTNAME}
+      targets:
+      - ${HOSTNAME}
 
 app_grafana_monitoring:
   - job_name: grafana-logs
@@ -102,15 +139,42 @@ app_loki_monitoring:
       targets:
       - ${HOSTNAME}
 
-app_app111:
-  - job_name: myapp111
+app_alert_manager_monitoring:
+  - job_name: alertmanager-logs
     static_configs:
-    - targets:
-      - localhost
-      labels:
-        host: ${HOSTNAME}
-        __path__: /opt/promtailtest/test6.log
-        application: applogs
+    - labels:
+        agent_hostname: ${HOSTNAME}
+        __path__: /opt/grafana/logs/alertmanager/alertmanager.log
+        application: alertmanager
+      targets:
+      - ${HOSTNAME}
+
+app_tempo_logs_monitoring:
+  - job_name: tempo-logs
+    static_configs:
+    - labels:
+        agent_hostname: ${HOSTNAME}
+        __path__: /opt/grafana/logs/tempo/tempo.log
+        application: tempo
+      targets:
+      - ${HOSTNAME}
+
+# Process Monitoring
+
+proc_nginx_worker_process:
+  - cmdline:
+    - 'nginx: worker process'
+    name: nginx_worker_process
+
+proc_nginx_master_process:
+  - cmdline:
+    - 'nginx: master process'
+    name: nginx_master_process
+
+proc_nginx_cache_manager_process:
+  - cmdline:
+    - 'nginx: cache manager process'
+    name: nginx_cache_manager_process
 
 proc_grafanaserver:
   - cmdline:
@@ -122,28 +186,17 @@ proc_prometheusserver:
     - '/opt/grafana/prometheus/prometheus'
     name: prometheus
 
-bp-hpe-rhel02.wwtpoc.local:
-  - "app2"
+proc_lokiserver:
+  - cmdline:
+    - '/opt/grafana/loki/loki-linux-amd64'
+    name: loki
 
-bp-hpe-rhel06.wwtpoc.local:
-  - "app6"
+proc_alertmanagerserver:
+  - cmdline:
+    - '/opt/grafana/alertmanager/alertmanager'
+    name: alertmanager
 
-app_app2:
-  - job_name: myapp2
-    static_configs:
-    - targets:
-      - localhost
-      labels:
-        host: ${HOSTNAME}
-        __path__: /opt/promtailtest/test2.log
-        application: applogs
-
-app_app6:
-  - job_name: myapp6
-    static_configs:
-    - targets:
-      - localhost
-      labels:
-        host: ${HOSTNAME}
-        __path__: /opt/promtailtest/test6.log
-        application: applogs
+proc_temposerver:
+  - cmdline:
+    - '/opt/grafana/tempo/tempo'
+    name: tempo
