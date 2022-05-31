@@ -45,7 +45,7 @@ log_config:
   logs:
     configs:
     - clients:
-        - url: http://10.254.160.112:9090/api/v1/write
+        - url: http://loki.aiops.wwtatc.local:3100/loki/api/v1/push
       name: promtail
       positions:
         filename: /tmp/positions.yaml
@@ -61,6 +61,7 @@ ansible.aiops.wwtatc.local:
 proc_ansible.aiops.wwtatc.local:
   - "grafanaserver"
   - "prometheusserver"
+  - "grafanaagent"
 
 # open-telemetry.aiops.wwtatc.local
 
@@ -96,6 +97,7 @@ proc_eshop.aiops.wwtatc.local:
   - "nginx_worker_process"
   - "nginx_master_process"
   - "nginx_cache_manager_process"
+  - "grafanaagent"
 
 # Log monitoring
 
@@ -200,3 +202,8 @@ proc_temposerver:
   - cmdline:
     - '/opt/grafana/tempo/tempo'
     name: tempo
+
+proc_grafanaagent:
+  - cmdline:
+    - /opt/grafana/agent/agent-linux-amd64
+    name: grafana-agent
