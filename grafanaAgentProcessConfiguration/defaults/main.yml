@@ -46,7 +46,7 @@ log_config:
     configs:
     - clients:
         - url: http://loki.aiops.wwtatc.local:3100/loki/api/v1/push
-      name: promtail
+      name: ${HOSTNAME}
       positions:
         filename: /tmp/positions.yaml
       scrape_configs:
