@@ -107,7 +107,7 @@ proc_eshop.aiops.wwtatc.local:
 # webshop.aiops.wwtatc.local
 
 webshop.aiops.wwtatc.local:
-  - "grafanaserver"
+  - "grafana_monitoring"
 
 proc_webshop.aiops.wwtatc.local:
   - "grafanaagent"
