@@ -67,6 +67,9 @@ proc_ansible.aiops.wwtatc.local:
 
 open-telemetry.aiops.wwtatc.local:
   - "app111"
+  
+proc_open-telemetry.aiops.wwtatc.local:
+  - "grafanaagent"
 
 # grafana.aiops.wwtatc.local
 
@@ -77,6 +80,7 @@ grafana.aiops.wwtatc.local:
 proc_grafana.aiops.wwtatc.local:
   - "grafanaserver"
   - "prometheusserver"
+  - "grafanaagent"
 
 # loki.aiops.wwtatc.local
 
@@ -87,6 +91,7 @@ proc_loki.aiops.wwtatc.local:
   - "lokiserver"
   - "alertmanagerserver"
   - "temposerver"
+  - "grafanaagent"
 
 # eshop.aiops.wwtatc.local
 
@@ -97,6 +102,13 @@ proc_eshop.aiops.wwtatc.local:
   - "nginx_worker_process"
   - "nginx_master_process"
   - "nginx_cache_manager_process"
+  - "grafanaagent"
+
+# webshop.aiops.wwtatc.local
+
+webshop.aiops.wwtatc.local:
+
+proc_webshop.aiops.wwtatc.local:
   - "grafanaagent"
 
 # Log monitoring
